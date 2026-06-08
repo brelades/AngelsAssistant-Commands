@@ -1,0 +1,197 @@
+const fs = require("fs");
+const path = require("path");
+
+/* =========================
+   COMMANDS TO EXCLUDE
+========================= */
+const EXCLUDED = new Set([
+  "!addpoints",
+  "!removepoints",
+  "!restock"
+]);
+
+/* =========================
+   LOAD COMMAND FILES
+========================= */
+const commandsDir = path.join(__dirname, "commands");
+const files = fs.readdirSync(commandsDir).filter(f => f.endsWith(".js"));
+
+const commands = [];
+
+for (const file of files) {
+  const cmd = require(path.join(commandsDir, file));
+
+  if (!cmd?.name) continue;
+  if (EXCLUDED.has(cmd.name.toLowerCase())) continue;
+
+  commands.push({
+    name: cmd.name,
+    description: cmd.description || "No description provided ✨"
+  });
+}
+
+commands.sort((a, b) => a.name.localeCompare(b.name));
+
+/* =========================
+   HTML
+========================= */
+const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AngelsAssistant Commands</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+    body {
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      background: radial-gradient(circle at top, #1b1f2a, #0f1117);
+      color: #e6e6e6;
+      padding: 40px;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 34px;
+      margin-bottom: 8px;
+      letter-spacing: 0.5px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #9aa0a6;
+      margin-bottom: 25px;
+    }
+
+    .search {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 25px;
+    }
+
+    .search input {
+      width: 100%;
+      max-width: 500px;
+      padding: 12px 16px;
+      border-radius: 10px;
+      border: 1px solid #2a2f3a;
+      background: #151923;
+      color: white;
+      outline: none;
+      transition: 0.2s;
+    }
+
+    .search input:focus {
+      border-color: #6c7bff;
+      box-shadow: 0 0 0 3px rgba(108,123,255,0.15);
+    }
+
+    .container {
+      max-width: 850px;
+      margin: auto;
+      display: grid;
+      gap: 12px;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: 0.25s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(108,123,255,0.4);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.35);
+    }
+
+    .card-header {
+      padding: 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      font-size: 15px;
+      letter-spacing: 0.3px;
+    }
+
+    .star {
+      color: #6c7bff;
+    }
+
+    .card-body {
+      max-height: 0;
+      overflow: hidden;
+      padding: 0 16px;
+      color: #b5b9c4;
+      text-align: center;
+      transition: all 0.35s ease;
+    }
+
+    .card.active .card-body {
+      max-height: 200px;
+      padding: 12px 16px 18px 16px;
+    }
+
+    .card.active {
+      border-color: rgba(108,123,255,0.5);
+    }
+  </style>
+</head>
+
+<body>
+  <h1>✨ Commands Hub ✨</h1>
+  <div class="subtitle">Search and click a command to view details</div>
+
+  <div class="search">
+    <input id="search" placeholder="Search commands..." onkeyup="filterCommands()" />
+  </div>
+
+  <div class="container" id="cmdContainer">
+    ${commands
+      .map(
+        c => `
+        <div class="card" onclick="toggle(this)">
+          <div class="card-header">
+            <span class="star">✦</span> ${c.name}
+          </div>
+          <div class="card-body">
+            ${c.description}
+          </div>
+        </div>
+      `
+      )
+      .join("")}
+  </div>
+
+<script>
+  function toggle(el) {
+    el.classList.toggle("active");
+  }
+
+  function filterCommands() {
+    const input = document.getElementById("search").value.toLowerCase();
+    const cards = document.querySelectorAll(".card");
+
+    cards.forEach(card => {
+      const text = card.innerText.toLowerCase();
+      card.style.display = text.includes(input) ? "block" : "none";
+    });
+  }
+</script>
+
+</body>
+</html>
+`;
+
+const outputPath = path.join(__dirname, "commands.html");
+fs.writeFileSync(outputPath, html);
+
+console.log("✨ Aesthetic commands page generated!");
