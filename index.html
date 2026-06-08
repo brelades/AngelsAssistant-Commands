@@ -1,41 +1,4 @@
-const fs = require("fs");
-const path = require("path");
 
-/* =========================
-   COMMANDS TO EXCLUDE
-========================= */
-const EXCLUDED = new Set([
-  "!addpoints",
-  "!removepoints",
-  "!restock"
-]);
-
-/* =========================
-   LOAD COMMAND FILES
-========================= */
-const commandsDir = path.join(__dirname, "commands");
-const files = fs.readdirSync(commandsDir).filter(f => f.endsWith(".js"));
-
-const commands = [];
-
-for (const file of files) {
-  const cmd = require(path.join(commandsDir, file));
-
-  if (!cmd?.name) continue;
-  if (EXCLUDED.has(cmd.name.toLowerCase())) continue;
-
-  commands.push({
-    name: cmd.name,
-    description: cmd.description || "No description provided ✨"
-  });
-}
-
-commands.sort((a, b) => a.name.localeCompare(b.name));
-
-/* =========================
-   HTML
-========================= */
-const html = `
 <!DOCTYPE html>
 <html>
 <head>
@@ -155,20 +118,97 @@ const html = `
   </div>
 
   <div class="container" id="cmdContainer">
-    ${commands
-      .map(
-        c => `
+    
         <div class="card" onclick="toggle(this)">
           <div class="card-header">
-            <span class="star">✦</span> ${c.name}
+            <span class="star">✦</span> !bal
           </div>
           <div class="card-body">
-            ${c.description}
+            Check your or another user's points balance 💰
           </div>
         </div>
-      `
-      )
-      .join("")}
+      
+        <div class="card" onclick="toggle(this)">
+          <div class="card-header">
+            <span class="star">✦</span> !botuptime
+          </div>
+          <div class="card-body">
+            Shows how long AngelsAssistant has been running ⏱️
+          </div>
+        </div>
+      
+        <div class="card" onclick="toggle(this)">
+          <div class="card-header">
+            <span class="star">✦</span> !coinflip
+          </div>
+          <div class="card-body">
+            Bet points on a coin flip (heads or tails) 🪙
+          </div>
+        </div>
+      
+        <div class="card" onclick="toggle(this)">
+          <div class="card-header">
+            <span class="star">✦</span> !help
+          </div>
+          <div class="card-body">
+            Get a link to the bot help page 📖
+          </div>
+        </div>
+      
+        <div class="card" onclick="toggle(this)">
+          <div class="card-header">
+            <span class="star">✦</span> !leaderboard
+          </div>
+          <div class="card-body">
+            Shows the top 5 users by points 🏆
+          </div>
+        </div>
+      
+        <div class="card" onclick="toggle(this)">
+          <div class="card-header">
+            <span class="star">✦</span> !linkdiscord
+          </div>
+          <div class="card-body">
+            Link your Discord account to AngelsAssistant 🔗
+          </div>
+        </div>
+      
+        <div class="card" onclick="toggle(this)">
+          <div class="card-header">
+            <span class="star">✦</span> !redeem
+          </div>
+          <div class="card-body">
+            Redeem shop items using points 🎟️
+          </div>
+        </div>
+      
+        <div class="card" onclick="toggle(this)">
+          <div class="card-header">
+            <span class="star">✦</span> !slots
+          </div>
+          <div class="card-body">
+            Try your luck on the slot machine 🎰
+          </div>
+        </div>
+      
+        <div class="card" onclick="toggle(this)">
+          <div class="card-header">
+            <span class="star">✦</span> !socials
+          </div>
+          <div class="card-body">
+            View y0urangels_ social media profiles 🐦
+          </div>
+        </div>
+      
+        <div class="card" onclick="toggle(this)">
+          <div class="card-header">
+            <span class="star">✦</span> !status
+          </div>
+          <div class="card-body">
+            Check if the streamer is live and see current game + viewers 📡
+          </div>
+        </div>
+      
   </div>
 
 <script>
@@ -189,9 +229,3 @@ const html = `
 
 </body>
 </html>
-`;
-
-const outputPath = path.join(__dirname, "commands.html");
-fs.writeFileSync(outputPath, html);
-
-console.log("✨ Aesthetic commands page generated!");
