@@ -2,122 +2,176 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Commands Hub</title>
+<title>Commands Hub</title>
 
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
-    body {
-      margin: 0;
-      font-family: Inter, Arial;
-      background: radial-gradient(circle at top, #1b1f2a, #0f1117);
-      color: #e6e6e6;
-      padding: 40px;
-    }
+body {
+  margin: 0;
+  font-family: Inter, Arial;
+  color: #e6e6e6;
+  padding: 40px;
+  overflow-x: hidden;
 
-    h1 {
-      text-align: center;
-      margin-bottom: 10px;
-    }
+  background: linear-gradient(-45deg, #0f1117, #111827, #0f172a, #1a1f2e);
+  background-size: 400% 400%;
+  animation: gradientMove 14s ease infinite;
+}
 
-    .subtitle {
-      text-align: center;
-      color: #9aa0a6;
-      margin-bottom: 30px;
-    }
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
 
-    .app-icon {
-      width: 18px;
-      height: 18px;
-      object-fit: contain;
-      display: inline-block;
-    }
+/* STAR BACKGROUND */
+.stars {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
 
-    /* CATEGORY */
-    .category {
-      max-width: 900px;
-      margin: auto;
-      margin-bottom: 15px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,0.1);
-      background: rgba(255,255,255,0.03);
-      overflow: hidden;
-    }
+.star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: white;
+  border-radius: 50%;
+  opacity: 0.5;
+  animation: floatStar linear infinite;
+}
 
-    .category-header {
-      padding: 16px;
-      cursor: pointer;
-      font-weight: 700;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: rgba(255,255,255,0.05);
-    }
+@keyframes floatStar {
+  from { transform: translateY(100vh); opacity: 0; }
+  50% { opacity: 1; }
+  to { transform: translateY(-10vh); opacity: 0; }
+}
 
-    .category-content {
-      max-height: 0;
-      overflow: hidden;
-      transition: 0.4s ease;
-    }
+h1, .subtitle, .category {
+  position: relative;
+  z-index: 2;
+}
 
-    .category.active .category-content {
-      max-height: 2000px;
-      padding: 10px;
-    }
+h1 {
+  text-align: center;
+  margin-bottom: 8px;
+}
 
-    /* CARD */
-    .card {
-      margin: 10px;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.08);
-      background: rgba(255,255,255,0.04);
-      overflow: hidden;
-      cursor: pointer;
-      transition: 0.2s ease;
-    }
+.subtitle {
+  text-align: center;
+  color: #9aa0a6;
+  margin-bottom: 20px;
+}
 
-    .card:hover {
-      transform: translateY(-2px);
-      border-color: rgba(108,123,255,0.4);
-    }
+/* CATEGORY */
+.category {
+  max-width: 900px;
+  margin: auto;
+  margin-bottom: 15px;
+  border-radius: 16px;
+  overflow: hidden;
 
-    .card-header {
-      padding: 14px;
-      text-align: center;
-      font-weight: 600;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 8px;
-    }
+  background: rgba(255,255,255,0.04);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.08);
+}
 
-    .card-body {
-      max-height: 0;
-      overflow: hidden;
-      padding: 0 14px;
-      text-align: center;
-      color: #b5b9c4;
-      transition: 0.3s ease;
-    }
+.category.twitch {
+  box-shadow: 0 0 20px rgba(145,70,255,0.25);
+}
 
-    .card.active .card-body {
-      max-height: 150px;
-      padding: 10px 14px 14px;
-    }
-  </style>
+.category.discord {
+  box-shadow: 0 0 20px rgba(88,101,242,0.25);
+}
+
+.category-header {
+  padding: 16px;
+  cursor: pointer;
+  font-weight: 700;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255,255,255,0.06);
+}
+
+/* ICON */
+.app-icon {
+  width: 18px;
+  height: 18px;
+  margin-right: 8px;
+  vertical-align: middle;
+  filter: brightness(0) invert(1);
+}
+
+.category-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: 0.4s ease;
+}
+
+.category.active .category-content {
+  max-height: 2000px;
+  padding: 10px;
+}
+
+/* CARD */
+.card {
+  margin: 10px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.04);
+  overflow: hidden;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.card:hover {
+  transform: scale(1.01);
+}
+
+.card-header {
+  padding: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+
+.card-body {
+  max-height: 0;
+  overflow: hidden;
+  padding: 0 14px;
+  text-align: center;
+  color: #b5b9c4;
+  transition: 0.3s ease;
+}
+
+/* ACTIVE STATE */
+.card.active .card-body {
+  max-height: 150px;
+  padding: 10px 14px 14px;
+}
+</style>
 </head>
 
 <body>
 
+<div class="stars" id="stars"></div>
+
 <h1>✨ Commands Hub ✨</h1>
-<div class="subtitle">Twitch & Discord command documentation</div>
+<div class="subtitle">Live Twitch & Discord command dashboard</div>
 
 <!-- TWITCH -->
-<div class="category" onclick="toggleCategory(this)">
+<div class="category twitch" id="twitchCat" onclick="toggleCategory(this)">
   <div class="category-header">
-    <div style="display:flex;align-items:center;gap:10px;">
-      <img class="app-icon" src="https://img.icons8.com/ios-filled/50/ffffff/twitch.png" />
-      <span>Twitch</span>
+    <div style="display:flex;align-items:center;">
+      <img class="app-icon"
+           src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/twitch.svg" />
+      Twitch
     </div>
     <span>▼</span>
   </div>
@@ -126,80 +180,70 @@
     
       <div class="card" onclick="toggleCard(event, this)">
         <div class="card-header">
-          <span>💰</span>
-          <span>bal</span>
+          <span>💰</span> bal
         </div>
         <div class="card-body">Check your or another user's points balance</div>
       </div>
     
       <div class="card" onclick="toggleCard(event, this)">
         <div class="card-header">
-          <span>⏱️</span>
-          <span>botuptime</span>
+          <span>⏱️</span> botuptime
         </div>
         <div class="card-body">Shows how long AngelsAssistant has been running</div>
       </div>
     
       <div class="card" onclick="toggleCard(event, this)">
         <div class="card-header">
-          <span>🪙</span>
-          <span>coinflip</span>
+          <span>🪙</span> coinflip
         </div>
         <div class="card-body">Bet points on a coin flip (heads or tails)</div>
       </div>
     
       <div class="card" onclick="toggleCard(event, this)">
         <div class="card-header">
-          <span>📖</span>
-          <span>help</span>
+          <span>📖</span> help
         </div>
         <div class="card-body">Get a link to the bot help page</div>
       </div>
     
       <div class="card" onclick="toggleCard(event, this)">
         <div class="card-header">
-          <span>🏆</span>
-          <span>leaderboard</span>
+          <span>🏆</span> leaderboard
         </div>
         <div class="card-body">Shows the top 5 users by points</div>
       </div>
     
       <div class="card" onclick="toggleCard(event, this)">
         <div class="card-header">
-          <span>🤝</span>
-          <span>linkdiscord</span>
+          <span>🤝</span> linkdiscord
         </div>
         <div class="card-body">Link your Discord account to Twitch</div>
       </div>
     
       <div class="card" onclick="toggleCard(event, this)">
         <div class="card-header">
-          <span>🎟️</span>
-          <span>redeem</span>
+          <span>🎟️</span> redeem
         </div>
         <div class="card-body">Redeem shop items using points</div>
       </div>
     
       <div class="card" onclick="toggleCard(event, this)">
         <div class="card-header">
-          <span>🎰</span>
-          <span>slots</span>
+          <span>🎰</span> slots
         </div>
         <div class="card-body">Try your luck on the slot machine</div>
       </div>
     
       <div class="card" onclick="toggleCard(event, this)">
         <div class="card-header">
-          <span>🐦</span>
-          <span>socials</span>
+          <span>🐦</span> socials
         </div>
         <div class="card-body">View y0urangels_ social media profiles</div>
       </div>
     
       <div class="card" onclick="toggleCard(event, this)">
         <div class="card-header">
-          <span>📡</span>
-          <span>status</span>
+          <span>📡</span> status
         </div>
         <div class="card-body">Check if the streamer is live and see current game + viewers</div>
       </div>
@@ -208,11 +252,12 @@
 </div>
 
 <!-- DISCORD -->
-<div class="category" onclick="toggleCategory(this)">
+<div class="category discord" id="discordCat" onclick="toggleCategory(this)">
   <div class="category-header">
-    <div style="display:flex;align-items:center;gap:10px;">
-      <img class="app-icon" src="https://img.icons8.com/ios-filled/50/ffffff/discord-logo.png" />
-      <span>Discord</span>
+    <div style="display:flex;align-items:center;">
+      <img class="app-icon"
+           src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/discord.svg" />
+      Discord
     </div>
     <span>▼</span>
   </div>
@@ -221,8 +266,7 @@
     
       <div class="card" onclick="toggleCard(event, this)">
         <div class="card-header">
-          <span>🔗</span>
-          <span>link</span>
+          <span>🔗</span> link
         </div>
         <div class="card-body">Link your Twitch & Discord accounts</div>
       </div>
@@ -231,13 +275,24 @@
 </div>
 
 <script>
-function toggleCategory(el) {
+function toggleCategory(el){
   el.classList.toggle("active");
 }
 
-function toggleCard(e, el) {
-  e.stopPropagation();
+function toggleCard(e, el){
+  e.stopPropagation(); // prevents category from toggling
   el.classList.toggle("active");
+}
+
+/* STAR PARTICLES */
+const starContainer = document.getElementById("stars");
+
+for(let i=0;i<60;i++){
+  const s = document.createElement("div");
+  s.className="star";
+  s.style.left=Math.random()*100+"vw";
+  s.style.animationDuration=(3+Math.random()*5)+"s";
+  starContainer.appendChild(s);
 }
 </script>
 
