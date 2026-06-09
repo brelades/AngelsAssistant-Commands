@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -24,9 +25,7 @@ body {
   100% { background-position: 0% 50%; }
 }
 
-/* =========================
-   STAR BACKGROUND
-========================= */
+/* STAR BACKGROUND */
 .stars {
   position: fixed;
   width: 100%;
@@ -41,23 +40,16 @@ body {
   height: 2px;
   background: white;
   border-radius: 50%;
-  opacity: 0;
-  top: -10px;
-  left: 0;
+  opacity: 0.5;
   animation: floatStar linear infinite;
-  will-change: transform, opacity;
 }
 
 @keyframes floatStar {
-  0% { transform: translateY(0vh); opacity: 0; }
-  10% { opacity: 0.8; }
-  90% { opacity: 0.8; }
-  100% { transform: translateY(110vh); opacity: 0; }
+  from { transform: translateY(100vh); opacity: 0; }
+  50% { opacity: 1; }
+  to { transform: translateY(-10vh); opacity: 0; }
 }
 
-/* =========================
-   LAYOUT
-========================= */
 h1, .subtitle, .category {
   position: relative;
   z-index: 2;
@@ -74,9 +66,7 @@ h1 {
   margin-bottom: 20px;
 }
 
-/* =========================
-   CATEGORY
-========================= */
+/* CATEGORY */
 .category {
   max-width: 900px;
   margin: auto;
@@ -87,11 +77,8 @@ h1 {
   background: rgba(255,255,255,0.04);
   backdrop-filter: blur(16px);
   border: 1px solid rgba(255,255,255,0.08);
-
-  transition: 0.25s ease;
 }
 
-/* GLOW EFFECTS */
 .category.twitch {
   box-shadow: 0 0 20px rgba(145,70,255,0.25);
 }
@@ -100,16 +87,7 @@ h1 {
   box-shadow: 0 0 20px rgba(88,101,242,0.25);
 }
 
-/* stronger hover glow */
-.category:hover.twitch {
-  box-shadow: 0 0 35px rgba(145,70,255,0.35);
-}
-
-.category:hover.discord {
-  box-shadow: 0 0 35px rgba(88,101,242,0.35);
-}
-
-/* HEADER */
+/* HEADER (ONLY CLICK AREA) */
 .category-header {
   padding: 16px;
   cursor: pointer;
@@ -120,8 +98,9 @@ h1 {
   background: rgba(255,255,255,0.06);
 }
 
-/* ROTATING ARROW */
+/* ARROW */
 .category-header span {
+  display: inline-block;
   transition: transform 0.3s ease;
 }
 
@@ -142,7 +121,7 @@ h1 {
 .category-content {
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.4s ease, padding 0.3s ease;
+  transition: 0.4s ease;
 }
 
 .category.active .category-content {
@@ -150,9 +129,7 @@ h1 {
   padding: 10px;
 }
 
-/* =========================
-   CARD
-========================= */
+/* CARD */
 .card {
   margin: 10px;
   border-radius: 14px;
@@ -160,12 +137,11 @@ h1 {
   background: rgba(255,255,255,0.04);
   overflow: hidden;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: 0.2s ease;
 }
 
 .card:hover {
-  transform: scale(1.015);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+  transform: scale(1.01);
 }
 
 .card-header {
@@ -183,10 +159,9 @@ h1 {
   padding: 0 14px;
   text-align: center;
   color: #b5b9c4;
-  transition: max-height 0.35s ease, padding 0.35s ease;
+  transition: 0.3s ease;
 }
 
-/* ACTIVE */
 .card.active .card-body {
   max-height: 150px;
   padding: 10px 14px 14px;
@@ -202,8 +177,8 @@ h1 {
 <div class="subtitle">Live Twitch & Discord command dashboard</div>
 
 <!-- TWITCH -->
-<div class="category twitch" onclick="toggleCategory(this)">
-  <div class="category-header">
+<div class="category twitch">
+  <div class="category-header" onclick="toggleCategory(this.parentElement)">
     <div style="display:flex;align-items:center;">
       <img class="app-icon"
         src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/twitch.svg" />
@@ -213,63 +188,83 @@ h1 {
   </div>
 
   <div class="category-content">
-
-    <div class="card" onclick="toggleCard(event,this)">
-      <div class="card-header">💰 bal</div>
-      <div class="card-body">Check your or another user's points balance</div>
-    </div>
-
-    <div class="card" onclick="toggleCard(event,this)">
-      <div class="card-header">⏱️ botuptime</div>
-      <div class="card-body">Shows how long AngelsAssistant has been running</div>
-    </div>
-
-    <div class="card" onclick="toggleCard(event,this)">
-      <div class="card-header">🪙 coinflip</div>
-      <div class="card-body">Bet points on a coin flip (heads or tails)</div>
-    </div>
-
-    <div class="card" onclick="toggleCard(event,this)">
-      <div class="card-header">📖 help</div>
-      <div class="card-body">Get a link to the bot help page</div>
-    </div>
-
-    <div class="card" onclick="toggleCard(event,this)">
-      <div class="card-header">🏆 leaderboard</div>
-      <div class="card-body">Shows the top 5 users by points</div>
-    </div>
-
-    <div class="card" onclick="toggleCard(event,this)">
-      <div class="card-header">🤝 linkdiscord</div>
-      <div class="card-body">Link your Discord account to Twitch</div>
-    </div>
-
-    <div class="card" onclick="toggleCard(event,this)">
-      <div class="card-header">🎟️ redeem</div>
-      <div class="card-body">Redeem shop items using points</div>
-    </div>
-
-    <div class="card" onclick="toggleCard(event,this)">
-      <div class="card-header">🎰 slots</div>
-      <div class="card-body">Try your luck on the slot machine</div>
-    </div>
-
-    <div class="card" onclick="toggleCard(event,this)">
-      <div class="card-header">🐦 socials</div>
-      <div class="card-body">View social media profiles</div>
-    </div>
-
-    <div class="card" onclick="toggleCard(event,this)">
-      <div class="card-header">📡 status</div>
-      <div class="card-body">Check stream status</div>
-    </div>
-
+    
+      <div class="card" onclick="toggleCard(event,this)">
+        <div class="card-header">
+          <span>💰</span> bal
+        </div>
+        <div class="card-body">Check your or another user's points balance</div>
+      </div>
+    
+      <div class="card" onclick="toggleCard(event,this)">
+        <div class="card-header">
+          <span>⏱️</span> botuptime
+        </div>
+        <div class="card-body">Shows how long AngelsAssistant has been running</div>
+      </div>
+    
+      <div class="card" onclick="toggleCard(event,this)">
+        <div class="card-header">
+          <span>🪙</span> coinflip
+        </div>
+        <div class="card-body">Bet points on a coin flip (heads or tails)</div>
+      </div>
+    
+      <div class="card" onclick="toggleCard(event,this)">
+        <div class="card-header">
+          <span>📖</span> help
+        </div>
+        <div class="card-body">Get a link to the bot help page</div>
+      </div>
+    
+      <div class="card" onclick="toggleCard(event,this)">
+        <div class="card-header">
+          <span>🏆</span> leaderboard
+        </div>
+        <div class="card-body">Shows the top 5 users by points</div>
+      </div>
+    
+      <div class="card" onclick="toggleCard(event,this)">
+        <div class="card-header">
+          <span>🤝</span> linkdiscord
+        </div>
+        <div class="card-body">Link your Discord account to Twitch</div>
+      </div>
+    
+      <div class="card" onclick="toggleCard(event,this)">
+        <div class="card-header">
+          <span>🎟️</span> redeem
+        </div>
+        <div class="card-body">Redeem shop items using points</div>
+      </div>
+    
+      <div class="card" onclick="toggleCard(event,this)">
+        <div class="card-header">
+          <span>🎰</span> slots
+        </div>
+        <div class="card-body">Try your luck on the slot machine</div>
+      </div>
+    
+      <div class="card" onclick="toggleCard(event,this)">
+        <div class="card-header">
+          <span>🐦</span> socials
+        </div>
+        <div class="card-body">View y0urangels_ social media profiles</div>
+      </div>
+    
+      <div class="card" onclick="toggleCard(event,this)">
+        <div class="card-header">
+          <span>📡</span> status
+        </div>
+        <div class="card-body">Check if the streamer is live and see current game + viewers</div>
+      </div>
+    
   </div>
 </div>
 
 <!-- DISCORD -->
-<div class="category discord" onclick="toggleCategory(this)">
-  <div class="category-header">
+<div class="category discord">
+  <div class="category-header" onclick="toggleCategory(this.parentElement)">
     <div style="display:flex;align-items:center;">
       <img class="app-icon"
         src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/discord.svg" />
@@ -279,12 +274,28 @@ h1 {
   </div>
 
   <div class="category-content">
-
-    <div class="card" onclick="toggleCard(event,this)">
-      <div class="card-header">🔗 link</div>
-      <div class="card-body">Link Twitch & Discord accounts</div>
-    </div>
-
+    
+      <div class="card" onclick="toggleCard(event,this)">
+        <div class="card-header">
+          <span>⚙️</span> check-points
+        </div>
+        <div class="card-body">Check your or another user's points balance</div>
+      </div>
+    
+      <div class="card" onclick="toggleCard(event,this)">
+        <div class="card-header">
+          <span>🏆</span> leaderboard
+        </div>
+        <div class="card-body">View the points leaderboard</div>
+      </div>
+    
+      <div class="card" onclick="toggleCard(event,this)">
+        <div class="card-header">
+          <span>🔗</span> link
+        </div>
+        <div class="card-body">Link your Twitch & Discord accounts</div>
+      </div>
+    
   </div>
 </div>
 
@@ -298,28 +309,15 @@ function toggleCard(e, el){
   el.classList.toggle("active");
 }
 
-/* =========================
-   STAR SYSTEM IMPROVED
-========================= */
+/* STAR PARTICLES */
 document.addEventListener("DOMContentLoaded", () => {
   const starContainer = document.getElementById("stars");
-  const STAR_COUNT = 90;
 
-  for (let i = 0; i < STAR_COUNT; i++) {
+  for(let i=0;i<70;i++){
     const s = document.createElement("div");
-    s.className = "star";
-
-    const left = Math.random() * 100;
-    const size = Math.random() * 2 + 1;
-    const duration = 4 + Math.random() * 6;
-    const delay = Math.random() * 6;
-
-    s.style.left = left + "vw";
-    s.style.width = size + "px";
-    s.style.height = size + "px";
-    s.style.animationDuration = duration + "s";
-    s.style.animationDelay = delay + "s";
-
+    s.className="star";
+    s.style.left=Math.random()*100+"vw";
+    s.style.animationDuration=(3+Math.random()*5)+"s";
     starContainer.appendChild(s);
   }
 });
