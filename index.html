@@ -2,14 +2,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>AngelsAssistant Commands</title>
+  <title>Commands Hub</title>
 
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
     body {
       margin: 0;
-      font-family: Inter, Arial, sans-serif;
+      font-family: Inter, Arial;
       background: radial-gradient(circle at top, #1b1f2a, #0f1117);
       color: #e6e6e6;
       padding: 40px;
@@ -17,214 +17,228 @@
 
     h1 {
       text-align: center;
-      font-size: 34px;
-      margin-bottom: 8px;
-      letter-spacing: 0.5px;
+      margin-bottom: 10px;
     }
 
     .subtitle {
       text-align: center;
       color: #9aa0a6;
-      margin-bottom: 25px;
+      margin-bottom: 30px;
     }
 
-    .search {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 25px;
+    .app-icon {
+      width: 18px;
+      height: 18px;
+      object-fit: contain;
+      display: inline-block;
     }
 
-    .search input {
-      width: 100%;
-      max-width: 500px;
-      padding: 12px 16px;
-      border-radius: 10px;
-      border: 1px solid #2a2f3a;
-      background: #151923;
-      color: white;
-      outline: none;
-      transition: 0.2s;
-    }
-
-    .search input:focus {
-      border-color: #6c7bff;
-      box-shadow: 0 0 0 3px rgba(108,123,255,0.15);
-    }
-
-    .container {
-      max-width: 850px;
+    /* CATEGORY */
+    .category {
+      max-width: 900px;
       margin: auto;
-      display: grid;
-      gap: 12px;
+      margin-bottom: 15px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.03);
+      overflow: hidden;
     }
 
+    .category-header {
+      padding: 16px;
+      cursor: pointer;
+      font-weight: 700;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255,255,255,0.05);
+    }
+
+    .category-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: 0.4s ease;
+    }
+
+    .category.active .category-content {
+      max-height: 2000px;
+      padding: 10px;
+    }
+
+    /* CARD */
     .card {
-      background: rgba(255,255,255,0.04);
+      margin: 10px;
+      border-radius: 12px;
       border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 14px;
+      background: rgba(255,255,255,0.04);
       overflow: hidden;
       cursor: pointer;
-      transition: 0.25s ease;
-      backdrop-filter: blur(10px);
+      transition: 0.2s ease;
     }
 
     .card:hover {
-      transform: translateY(-3px);
+      transform: translateY(-2px);
       border-color: rgba(108,123,255,0.4);
-      box-shadow: 0 10px 25px rgba(0,0,0,0.35);
     }
 
     .card-header {
-      padding: 16px;
+      padding: 14px;
+      text-align: center;
+      font-weight: 600;
       display: flex;
       justify-content: center;
       align-items: center;
       gap: 8px;
-      font-weight: 600;
-      font-size: 15px;
-      letter-spacing: 0.3px;
-    }
-
-    .star {
-      color: #6c7bff;
     }
 
     .card-body {
       max-height: 0;
       overflow: hidden;
-      padding: 0 16px;
-      color: #b5b9c4;
+      padding: 0 14px;
       text-align: center;
-      transition: all 0.35s ease;
+      color: #b5b9c4;
+      transition: 0.3s ease;
     }
 
     .card.active .card-body {
-      max-height: 200px;
-      padding: 12px 16px 18px 16px;
-    }
-
-    .card.active {
-      border-color: rgba(108,123,255,0.5);
+      max-height: 150px;
+      padding: 10px 14px 14px;
     }
   </style>
 </head>
 
 <body>
-  <h1>✨ Commands Hub ✨</h1>
-  <div class="subtitle">Search and click a command to view details</div>
 
-  <div class="search">
-    <input id="search" placeholder="Search commands..." onkeyup="filterCommands()" />
+<h1>✨ Commands Hub ✨</h1>
+<div class="subtitle">Twitch & Discord command documentation</div>
+
+<!-- TWITCH -->
+<div class="category" onclick="toggleCategory(this)">
+  <div class="category-header">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <img class="app-icon" src="https://img.icons8.com/ios-filled/50/ffffff/twitch.png" />
+      <span>Twitch</span>
+    </div>
+    <span>▼</span>
   </div>
 
-  <div class="container" id="cmdContainer">
+  <div class="category-content">
     
-        <div class="card" onclick="toggle(this)">
-          <div class="card-header">
-            <span class="star">✦</span> !bal
-          </div>
-          <div class="card-body">
-            Check your or another user's points balance 💰
-          </div>
+      <div class="card" onclick="toggleCard(event, this)">
+        <div class="card-header">
+          <span>💰</span>
+          <span>bal</span>
         </div>
-      
-        <div class="card" onclick="toggle(this)">
-          <div class="card-header">
-            <span class="star">✦</span> !botuptime
-          </div>
-          <div class="card-body">
-            Shows how long AngelsAssistant has been running ⏱️
-          </div>
+        <div class="card-body">Check your or another user's points balance</div>
+      </div>
+    
+      <div class="card" onclick="toggleCard(event, this)">
+        <div class="card-header">
+          <span>⏱️</span>
+          <span>botuptime</span>
         </div>
-      
-        <div class="card" onclick="toggle(this)">
-          <div class="card-header">
-            <span class="star">✦</span> !coinflip
-          </div>
-          <div class="card-body">
-            Bet points on a coin flip (heads or tails) 🪙
-          </div>
+        <div class="card-body">Shows how long AngelsAssistant has been running</div>
+      </div>
+    
+      <div class="card" onclick="toggleCard(event, this)">
+        <div class="card-header">
+          <span>🪙</span>
+          <span>coinflip</span>
         </div>
-      
-        <div class="card" onclick="toggle(this)">
-          <div class="card-header">
-            <span class="star">✦</span> !help
-          </div>
-          <div class="card-body">
-            Get a link to the bot help page 📖
-          </div>
+        <div class="card-body">Bet points on a coin flip (heads or tails)</div>
+      </div>
+    
+      <div class="card" onclick="toggleCard(event, this)">
+        <div class="card-header">
+          <span>📖</span>
+          <span>help</span>
         </div>
-      
-        <div class="card" onclick="toggle(this)">
-          <div class="card-header">
-            <span class="star">✦</span> !leaderboard
-          </div>
-          <div class="card-body">
-            Shows the top 5 users by points 🏆
-          </div>
+        <div class="card-body">Get a link to the bot help page</div>
+      </div>
+    
+      <div class="card" onclick="toggleCard(event, this)">
+        <div class="card-header">
+          <span>🏆</span>
+          <span>leaderboard</span>
         </div>
-      
-        <div class="card" onclick="toggle(this)">
-          <div class="card-header">
-            <span class="star">✦</span> !linkdiscord
-          </div>
-          <div class="card-body">
-            Link your Discord account to AngelsAssistant 🔗
-          </div>
+        <div class="card-body">Shows the top 5 users by points</div>
+      </div>
+    
+      <div class="card" onclick="toggleCard(event, this)">
+        <div class="card-header">
+          <span>🤝</span>
+          <span>linkdiscord</span>
         </div>
-      
-        <div class="card" onclick="toggle(this)">
-          <div class="card-header">
-            <span class="star">✦</span> !redeem
-          </div>
-          <div class="card-body">
-            Redeem shop items using points 🎟️
-          </div>
+        <div class="card-body">Link your Discord account to Twitch</div>
+      </div>
+    
+      <div class="card" onclick="toggleCard(event, this)">
+        <div class="card-header">
+          <span>🎟️</span>
+          <span>redeem</span>
         </div>
-      
-        <div class="card" onclick="toggle(this)">
-          <div class="card-header">
-            <span class="star">✦</span> !slots
-          </div>
-          <div class="card-body">
-            Try your luck on the slot machine 🎰
-          </div>
+        <div class="card-body">Redeem shop items using points</div>
+      </div>
+    
+      <div class="card" onclick="toggleCard(event, this)">
+        <div class="card-header">
+          <span>🎰</span>
+          <span>slots</span>
         </div>
-      
-        <div class="card" onclick="toggle(this)">
-          <div class="card-header">
-            <span class="star">✦</span> !socials
-          </div>
-          <div class="card-body">
-            View y0urangels_ social media profiles 🐦
-          </div>
+        <div class="card-body">Try your luck on the slot machine</div>
+      </div>
+    
+      <div class="card" onclick="toggleCard(event, this)">
+        <div class="card-header">
+          <span>🐦</span>
+          <span>socials</span>
         </div>
-      
-        <div class="card" onclick="toggle(this)">
-          <div class="card-header">
-            <span class="star">✦</span> !status
-          </div>
-          <div class="card-body">
-            Check if the streamer is live and see current game + viewers 📡
-          </div>
+        <div class="card-body">View y0urangels_ social media profiles</div>
+      </div>
+    
+      <div class="card" onclick="toggleCard(event, this)">
+        <div class="card-header">
+          <span>📡</span>
+          <span>status</span>
         </div>
-      
+        <div class="card-body">Check if the streamer is live and see current game + viewers</div>
+      </div>
+    
   </div>
+</div>
+
+<!-- DISCORD -->
+<div class="category" onclick="toggleCategory(this)">
+  <div class="category-header">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <img class="app-icon" src="https://img.icons8.com/ios-filled/50/ffffff/discord-logo.png" />
+      <span>Discord</span>
+    </div>
+    <span>▼</span>
+  </div>
+
+  <div class="category-content">
+    
+      <div class="card" onclick="toggleCard(event, this)">
+        <div class="card-header">
+          <span>🔗</span>
+          <span>link</span>
+        </div>
+        <div class="card-body">Link your Twitch & Discord accounts</div>
+      </div>
+    
+  </div>
+</div>
 
 <script>
-  function toggle(el) {
-    el.classList.toggle("active");
-  }
+function toggleCategory(el) {
+  el.classList.toggle("active");
+}
 
-  function filterCommands() {
-    const input = document.getElementById("search").value.toLowerCase();
-    const cards = document.querySelectorAll(".card");
-
-    cards.forEach(card => {
-      const text = card.innerText.toLowerCase();
-      card.style.display = text.includes(input) ? "block" : "none";
-    });
-  }
+function toggleCard(e, el) {
+  e.stopPropagation();
+  el.classList.toggle("active");
+}
 </script>
 
 </body>
