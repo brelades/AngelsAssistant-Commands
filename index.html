@@ -57,16 +57,40 @@ body {
   margin-bottom: 25px;
 }
 
+/* BASE CARD (SHARED LOOK) */
 .status-card {
   background: rgba(255,255,255,0.05);
   border: 1px solid rgba(255,255,255,0.08);
   backdrop-filter: blur(12px);
   border-radius: 14px;
   padding: 12px 20px;
-  min-width: 180px;
+  min-width: 200px;
   text-align: center;
+  transition: all 0.25s ease;
 }
 
+/* DASHBOARD STATUS (NOT CLICKABLE, BUT STILL HOVER GLOW) */
+.status-card.status {
+  box-shadow: 0 0 20px rgba(145,70,255,0.25);
+}
+
+/* DISCORD INVITE GLOW */
+.status-card.discord {
+  box-shadow: 0 0 25px rgba(88,101,242,0.35);
+}
+
+/* HOVER EFFECT FOR BOTH */
+.status-card:hover {
+  transform: translateY(-4px) scale(1.03);
+  border-color: rgba(255,255,255,0.25);
+}
+
+/* ONLY DISCORD GETS STRONGER GLOW ON HOVER */
+.status-card.discord:hover {
+  box-shadow: 0 0 35px rgba(88,101,242,0.5);
+}
+
+/* STATUS LABEL */
 .status-label {
   font-size: 12px;
   color: #9aa0a6;
@@ -190,25 +214,28 @@ h1 {
 <h1>✨ AngelsAssistant ✨</h1>
 <div class="subtitle">Live Twitch & Discord commands list</div>
 
-<!-- ================= STATUS BOX ================= -->
 <div class="status-bar">
-  <div class="status-card">
+
+  <!-- DASHBOARD STATUS (NOT CLICKABLE) -->
+  <div class="status-card status">
     <div class="status-label">Dashboard Status</div>
-    <div>Online</div>
+    <div style="color:#fff;font-weight:600;">🟢 Online</div>
   </div>
 
-  <div class="status-card">
-    <div class="status-label">Uptime</div>
-    <div id="uptime">Loading...</div>
-  </div>
+  <!-- DISCORD INVITE (CLICKABLE + BIG GLOW) -->
+  <a href="https://www.discord.gg/sXBSY8b9H5" target="_blank" style="text-decoration:none;">
+    <div class="status-card discord">
+      <div class="status-label">ANGEL'S BACKYARD (Click me!)</div>
+      <div id="members" style="color:#fff;font-weight:600;">Loading members...</div>
+    </div>
+  </a>
+
 </div>
 
-<!-- TWITCH -->
 <div class="category twitch">
   <div class="category-header" onclick="toggleCategory(this.parentElement)">
     <div style="display:flex;align-items:center;">
-      <img class="app-icon"
-        src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/twitch.svg" />
+      <img class="app-icon" src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/twitch.svg"/>
       Twitch
     </div>
     <span>▼</span>
@@ -220,7 +247,7 @@ h1 {
         <div class="card-header">
           <span>💰</span> bal
         </div>
-        <div class="card-body">Check your or another user's points balance</div>
+        <div class="card-body">Check your or another user&#039;s points balance</div>
       </div>
     
       <div class="card" onclick="toggleCard(event,this)">
@@ -296,12 +323,10 @@ h1 {
   </div>
 </div>
 
-<!-- DISCORD -->
 <div class="category discord">
   <div class="category-header" onclick="toggleCategory(this.parentElement)">
     <div style="display:flex;align-items:center;">
-      <img class="app-icon"
-        src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/discord.svg" />
+      <img class="app-icon" src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/discord.svg"/>
       Discord
     </div>
     <span>▼</span>
@@ -313,14 +338,14 @@ h1 {
         <div class="card-header">
           <span>❓</span> check-points
         </div>
-        <div class="card-body">Check your or another user's points balance</div>
+        <div class="card-body">Check your or another user&#039;s points balance</div>
       </div>
     
       <div class="card" onclick="toggleCard(event,this)">
         <div class="card-header">
           <span>🎨</span> create-role
         </div>
-        <div class="card-body">Create your custom role</div>
+        <div class="card-body">Claim your custom role (Restricted to those who purchased it)</div>
       </div>
     
       <div class="card" onclick="toggleCard(event,this)">
@@ -350,14 +375,20 @@ function toggleCard(e, el){
   el.classList.toggle("active");
 }
 
-let uptime = 0;
-setInterval(() => {
-  uptime++;
-  const h = Math.floor(uptime / 3600);
-  const m = Math.floor((uptime % 3600) / 60);
-  const s = uptime % 60;
-  document.getElementById("uptime").innerText = `${h}h ${m}m ${s}s`;
-}, 1000);
+async function loadMembers(){
+  try {
+    const res = await fetch("https://discord.com/api/v10/invites/sXBSY8b9H5?with_counts=true");
+    const data = await res.json();
+
+    const count = data?.approximate_member_count;
+
+    document.getElementById("members").innerText =
+      count ? count + " members" : "Join Server →";
+
+  } catch (e) {
+    document.getElementById("members").innerText = "Join Server →";
+  }
+}
 
 document.addEventListener("DOMContentLoaded", () => {
   const starContainer = document.getElementById("stars");
@@ -369,6 +400,8 @@ document.addEventListener("DOMContentLoaded", () => {
     s.style.animationDuration=(3+Math.random()*5)+"s";
     starContainer.appendChild(s);
   }
+
+  loadMembers();
 });
 </script>
 
